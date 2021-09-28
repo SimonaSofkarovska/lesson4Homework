@@ -1,6 +1,7 @@
 package com.company;
 
 import javafx.application.Application;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
@@ -34,7 +35,7 @@ public class Main extends Application {
         TextField nameInput = new TextField();
         System.out.println(nameInput.getText());
         nameInput.setPromptText("username");
-       // GridPane.setConstraints(nameInput,1,0);
+
 
         //password label
         Label password = new Label("Password:");
@@ -42,16 +43,56 @@ public class Main extends Application {
 
         //password input
         TextField passwordInput = new TextField();
-        String password1 = passwordInput.getText();
-       // password.setPromptText("password");
-       // GridPane.setConstraints(passwordInput,1,1);
+        StringProperty password1 = passwordInput.textProperty();
+        //trying to validate password
+        validatePassword(password1);
+
 
         Button login = new Button("Log in");
         GridPane.setConstraints(login,1,2);
+        login.setVisible(false);
+        if(validatePassword(password1))
+        {
+            login.setVisible(true);
+        }
 
-        gridPane.getChildren().addAll(name,nameInput, password, passwordInput, login);
+
+        gridPane.getChildren().addAll(name,nameInput, password, password1, login);
         Scene scene = new Scene (gridPane, 300, 200);
         window.setScene(scene);
         window.show();
+    }
+    public static boolean checkPassword (String password){
+        boolean hasNumber = false; boolean hasLetter = false;  char c;
+        for(int i = 0; i<password.length(); i++){
+            c = password.charAt(i);
+            if (Character.isDigit(c)) {
+                hasNumber = true;
+
+            }
+            else if (Character.isLetter(c)) {
+                hasLetter = true;
+
+            }
+            if(hasNumber && hasLetter) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean validatePassword(String password) {
+        if(password.length() >= 8) {
+            if(checkPassword(password)){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else {
+            System.out.println("Too short");
+            return false;
+        }
+        }
     }
 }
